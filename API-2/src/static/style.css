@@ -1,0 +1,93 @@
+*{
+    margin: 0;
+    padding: 0;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body{
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    width: 100%;
+    height: 100vh;
+}
+
+header{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100px;
+    background-color:lightskyblue;
+}
+footer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 60px;
+    background-color: aliceblue;
+}
+
+section{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.Botao-cad{
+    width: 170px;
+    height: 45px;
+    background-color: lightskyblue;
+    color: black;
+    border: lightblue 7px solid;
+    font-size: 15px;
+    font-weight: bolder;
+    border-radius: 10px;
+}
+table{
+    margin: 20px auto;
+    display: flex;
+    flex-direction: column;
+    border-collapse:collapse;
+}
+
+th, td{
+    width: 260px;
+    height: 80px;
+    text-align: center;
+    border: 1px solid #ddd; 
+}
+
+th {
+    background-color: lightblue;
+    
+}
+
+form{
+    margin: 20px auto;
+    border: 15px solid lightblue;
+    padding: 20px;
+    display: flex;
+    font-size: 16px;
+    flex-direction: column;
+    align-items: center;
+}
+
+form > div{
+    padding: 30px 300px;
+    width: 100%;
+    text-align: left; 
+}
+
+form > button{
+    width: 115px;
+}
+
+div > input{
+    height: 25px;
+    width: 100%;
+}
+
+div > select{
+    height: 25px;
+}

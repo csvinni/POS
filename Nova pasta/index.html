@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <table id="tbTarefas">
+        <thead>
+            <tr>
+                <th>id</th>
+                <th>descrição</th>
+                <th>prioridade</th>
+                <th>concluida</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <img src="https://lh6.googleusercontent.com/proxy/sDexSMG0yRL1JN0vfwRe3fRjcBzL7fJ9K_IEh9Q_eVSzgYDf2BS0Zlk0yiPNcbrDm9DSu1U9FQJsg-GHPz6qM3swIB6wMhsq20Yr-56V=w1600-h773" alt="">
+        <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+        <script>
+            function atualizarTabela(){
+                $.ajax({
+                    url:"http://127.0.0.1:8000/tarefas",
+                    method: "GET",
+                    dataType: "json",
+                    success: function(tarefas){
+                        const $tbody = $("#tbTarefas tbody");
+                        $tbody.empty();   // o $ é o metodo para o codigo saber que é o metodo de execução 
+                        
+                        tarefas.forEach(tarefa => {
+                            $tbody.append(`
+                            <tr>
+                                <td> ${tarefa.id}</td>
+                                <td> ${tarefa.descricao}</td>
+                                <td> ${tarefa.prioridade}</td>
+                                <td> ${tarefa.concluida}</td>
+                            </tr>
+        
+                        `)
+                    });
+                },
+                error: function(err){
+                    console.error("Erro:", err);
+                }
+
+            })  /*CRIANDO UMA FUNÇÃO ANONIMA*/
+        }
+
+        $(document).ready(function(){
+            setInterval(atualizarTabela, 1000); // vai atualizar de um em um segundo 
+        })
+        </script>
+    </body>
+</html>
