@@ -1,4 +1,4 @@
-from fastapi import FastAPI,HTTPException
+from fastapi import FastAPI,HTTPException, Body
 from models import Livro
 from typing import List
 
@@ -30,3 +30,11 @@ def criar_livro(livro:Livro):
     livros.append(livro)
     return livro
     raise HTTPException(404,"Não localizado")
+
+@app.put("/livros/{titulo}", response_model=Livro)
+def editar_livro(titulo: str, livro_editado: Livro = Body(...)):
+    for i, livro in enumerate(livros):
+        if livro.titulo == titulo:
+            livros[i] = livro_editado
+            return livro_editado
+    raise HTTPException(404, "Livro não localizado para edição")
