@@ -26,5 +26,6 @@ def deletar_livro(titulo:str):
 @app.post("/livros", response_model=Livro)
 def criar_livro(nome:str,livro:Livro):
     livros.append(livro)
-    return livro
+    for livro in livros:
+            return livro
     raise HTTPException(404,"Não localizado")

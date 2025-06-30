@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Reservas</title>
+</head>
+<body>
+    <h1>Reservas</h1>
+    <form id="form-reserva">
+        <input type="number" name="id" placeholder="ID da Reserva" required />
+        <input type="number" name="id_carro" placeholder="ID do Carro" required />
+        <input type="number" name="id_cliente" placeholder="ID do Cliente" required />
+        <input type="date" name="data_inicio" required />
+        <input type="date" name="data_fim" required />
+        <button type="submit">Criar Reserva</button>
+    </form>
+
+    <h2>Lista de Reservas</h2>
+    <ul id="lista-reservas"></ul>
+
+    <script>
+        async function carregarDados() {
+            const resReservas = await fetch('/reservas');
+            const reservas = await resReservas.json();
+            const lista = document.getElementById('lista-reservas');
+            lista.innerHTML = '';
+            reservas.forEach(r => {
+                const item = document.createElement('li');
+                item.innerHTML = `${r.id} - Cliente: ${r.cliente.nome} / Carro: ${r.carro.modelo} 
+                (${r.data_inicio} até ${r.data_fim}) 
+                <button onclick="cancelarReserva(${r.id})">Cancelar</button>`;
+                lista.appendChild(item);
+            });
+        }
+
+        async function cancelarReserva(id) {
+            await fetch(`/reservas/${id}`, { method: 'DELETE' });
+            carregarDados();
+        }
+
+        document.getElementById('form-reserva').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const form = e.target;
+
+            // Buscar cliente e carro para o corpo da reserva
+            const cliente = await (await fetch(`/clientes/${form.id_cliente.value}`)).json();
+            const carro = await (await fetch(`/carros`)).json().then(cs => cs.find(c => c.id === parseInt(form.id_carro.value)));
+
+            const data = {
+                id: parseInt(form.id.value),
+                cliente,
+                carro,
+                data_inicio: form.data_inicio.value,
+                data_fim: form.data_fim.value
+            };
+
+            await fetch('/reservas', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+            form.reset();
+            carregarDados();
+        });
+
+        carregarDados();
+    </script>
+</body>
+</html>

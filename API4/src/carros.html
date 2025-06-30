@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Carros</title>
+</head>
+<body>
+    <h1>Carros</h1>
+    <form id="form-carro">
+        <input type="number" name="id" placeholder="ID" required />
+        <input type="text" name="modelo" placeholder="Modelo" required />
+        <input type="text" name="marca" placeholder="Marca" required />
+        <input type="number" name="ano" placeholder="Ano" required />
+        <select name="disponivel">
+            <option value="true">Disponível</option>
+            <option value="false">Indisponível</option>
+        </select>
+        <button type="submit">Adicionar Carro</button>
+    </form>
+
+    <h2>Lista de Carros</h2>
+    <ul id="lista-carros"></ul>
+
+    <script>
+        async function carregarCarros() {
+            const res = await fetch('/carros');
+            const carros = await res.json();
+            const lista = document.getElementById('lista-carros');
+            lista.innerHTML = '';
+            carros.forEach(carro => {
+                const item = document.createElement('li');
+                item.innerHTML = `${carro.id} - ${carro.modelo} (${carro.marca}) - ${carro.ano} - ${carro.disponivel ? 'Disponível' : 'Indisponível'} 
+                <button onclick="removerCarro(${carro.id})">Remover</button>`;
+                lista.appendChild(item);
+            });
+        }
+
+        async function removerCarro(id) {
+            await fetch(`/carros/${id}`, { method: 'DELETE' });
+            carregarCarros();
+        }
+
+        document.getElementById('form-carro').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const form = e.target;
+            const data = {
+                id: parseInt(form.id.value),
+                modelo: form.modelo.value,
+                marca: form.marca.value,
+                ano: parseInt(form.ano.value),
+                disponivel: form.disponivel.value === "true"
+            };
+            await fetch('/carros', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            form.reset();
+            carregarCarros();
+        });
+
+        carregarCarros();
+    </script>
+</body>
+</html>
